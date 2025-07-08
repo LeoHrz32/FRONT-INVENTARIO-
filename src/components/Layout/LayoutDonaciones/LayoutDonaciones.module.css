@@ -1,0 +1,100 @@
+.ContentD {
+    display: flex;
+    justify-content: space-between;
+    width: 1290px;
+    max-width: 1400px; 
+    margin: 0 auto; 
+    height: auto;
+    position: relative;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    transition: transform 0.3s ease; 
+    top: 20px;
+}
+
+.ContentD .DerechoD,
+.ContentD .IzquierdoD {
+    width: 50%; 
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ContectImgD {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.ContectImgD img {
+    max-width: 100%; 
+    height: auto;
+    border-radius: 10px;
+}
+
+.IzquierdoD .ContGrandeD {
+    width: 100%;
+    text-align: left; 
+    box-sizing: border-box;
+}
+
+.subtitleD {
+    color: #009929;
+    font-size: 32px; 
+    display: flex;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    justify-content: center;
+}
+
+.textoD {
+    color: black;
+    font-size: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6; 
+    padding: 0;
+}
+
+.leftAlign .IzquierdoD {
+    order: 1;
+}
+
+.leftAlign .DerechoD {
+    order: 2;
+}
+
+.rightAlign .IzquierdoD {
+    order: 2;
+}
+
+.rightAlign .DerechoD {
+    order: 1;
+}
+
+@media (max-width: 768px) {
+    .ContentD {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .ContentD .DerechoD,
+    .ContentD .IzquierdoD {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .IzquierdoD .ContGrandeD {
+        text-align: center;
+    }
+}

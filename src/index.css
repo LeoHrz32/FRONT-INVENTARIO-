@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Para navegadores webkit (Chrome, Safari, Edge basado en Chromium, etc.) */
+/* Scrollbar para navegadores basados en Webkit (Chrome, Safari, Edge Chromium, etc.) */
+::-webkit-scrollbar {
+  width: 5px; /* Ancho del scrollbar */
+  height: 8px; /* Para scroll horizontal si es necesario */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #333; /* Color oscuro para la barra */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color al hacer hover */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Fondo transparente para la pista */
+}
+
+::-webkit-scrollbar-button {
+  background-color: #333; /* Color oscuro para las flechas */
+  display: block;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: normal; /* Scrollbar delgado */
+  scrollbar-color: #333 transparent; /* Barra de color oscuro y fondo transparente */
+}
+
+/* Aplicar solo al contenedor específico */
+.scroll-container {
+  max-height: 300px; /* Ajusta según necesites */
+  overflow-y: auto; /* Scroll vertical */
+  overflow-x: hidden; /* Sin scroll horizontal */
+}

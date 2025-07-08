@@ -1,0 +1,123 @@
+.ContentH {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1290px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    border: 1px solid rgba(7, 7, 7, 0.12);
+    gap: 20px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.IzquierdoH {
+    flex: 60%; 
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.DerechoH {
+    flex: 40%; 
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ContectImg {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 10px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+
+.ContGrandeH {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.TextGranH {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    line-height: 1.6;
+    padding: 10px;
+    width: 700px;
+    text-align: center;
+}
+
+.ListTextH {
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ContListasH {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 20px;
+    width: 100%;
+}
+
+.cardHomeH {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    border: 1px solid rgba(7, 7, 7, 0.12);
+    width: 100%; 
+    max-width: 450px; 
+    margin: 0 auto; 
+}
+
+.ListaH {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.iconH {
+    font-size: 120px;
+    color: #009929; 
+    transition: color 0.3s ease; 
+}
+
+.iconH:hover {
+    color: #005d00; /* Darker color on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ContentH {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .IzquierdoH, .DerechoH {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .ContListasH {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

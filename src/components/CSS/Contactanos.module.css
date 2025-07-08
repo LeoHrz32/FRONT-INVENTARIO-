@@ -1,0 +1,434 @@
+body{
+    background-color: #ffffff;
+}
+.bodycontact {
+    display: flex;
+    justify-content: space-between;
+    width: 1290px;
+    max-width: 1400px; 
+    margin: 0 auto; 
+    height: auto;
+    position: relative;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    transition: transform 0.3s ease; 
+    top: 20px;
+}
+
+.container20 {
+    width: 100%;
+    background: #fff;
+    padding: 20px 60px 30px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.left-side {
+    width: 40%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-side {
+    width: 60%; 
+    margin-left: 50px;
+}
+
+.below {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.below .details {
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid rgba(7, 7, 7, 0.12);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    text-align: center;
+}
+
+.below .details i {
+    font-size: 30px;
+    color: #009929;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.below .details .topic {
+    font-size: 18px;
+    font-weight: 500;
+    color: #009929;
+}
+
+.below .details .text-one,
+.below .details .text-two {
+    font-size: 14px;
+    font-family:'Courier New', Courier, monospace;
+    color: black;
+}
+
+.right-side .topic-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: #009929;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.right-side .topic-p {
+    font-size: 16px;
+    color: black;
+}
+
+.right-side p {
+    margin-bottom: 20px;
+}
+
+.right-side .input-box {
+    margin-bottom: 20px;
+}
+
+.right-side .input-box label {
+    font-size: 20px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.right-side .input-box .field {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #ddd;
+    outline: none;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.right-side .input-box .field.mess {
+    height: 150px;
+    resize: none;
+}
+
+.right-side .button {
+    margin-top: 20px;
+}
+
+.right-side .button button {
+    width: 100%;
+    height: 50px;
+    background: #3e2093;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.right-side .button button:hover {
+    background: #5029bc;
+}
+
+@media (max-width: 950px) {
+    .container20 {
+        width: 90%;
+        padding: 30px 40px 40px 35px;
+    }
+
+    .below .details {
+        flex: 1 1 calc(50% - 20px); /* Dos columnas en pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 820px) {
+    .container20 {
+        margin: 40px 0;
+    }
+
+    .content {
+        flex-direction: column; /* Cambiado a columna para apilar los elementos en pantallas pequeñas */
+    }
+
+    .below {
+        width: 100%;
+        flex-direction: row;
+        margin-top: 40px;
+        justify-content: center;
+    }
+
+    .right-side {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+.formC {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+    height: 400px;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    background-color: #fff;
+    color: #1a1a1a;
+    border: 1px solid rgba(7, 7, 7, 0.12);
+}
+
+form .formC {
+    max-width: 700px;
+    width: 100%;
+    background: #fff;
+    padding: 25px 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    color: #333;
+    margin: 25px;
+}
+
+.title {
+    font-size: 50px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    position: relative;
+    display: flex;
+    left: 80px;
+    text-align: center;
+    align-items: center;
+    padding-left: 30px;
+    color: #009929;
+}
+
+.flex {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.flex .field {
+    flex: 1; /* Permite que el campo ocupe el espacio disponible */
+    height: 60px; /* Ajusta la altura del campo */
+    background: transparent;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 18px; /* Aumenta el tamaño de la fuente */
+    color: #333;
+    box-sizing: border-box; /* Incluye el padding y border en el ancho total del elemento */
+    position: relative; /* Necesario para posicionar el span relativo al input */
+}
+
+.formC label {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Alinea el contenido verticalmente */
+    width: 100%;
+}
+
+.formC label .field {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #ddd;
+    outline: none;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 16px;
+    color: #333;
+    margin-top: 8px;
+    position: relative; /* Necesario para posicionar el span relativo al input */
+}
+
+.formC label .field.mess {
+    height: 120px;
+    resize: none;
+}
+
+.formC label .field.mess + span {
+    color: #575757;
+    position: absolute;
+    left: 10px; /* Ajusta la distancia desde el borde izquierdo del input */
+    top: 20%; /* Centra verticalmente */
+    transform: translateY(-50%); /* Alinea el texto verticalmente en el centro */
+    font-size: 1.2em;
+    cursor: text;
+    transition: 0.3s ease;
+}
+
+.formC label .field + span {
+    color: #575757;
+    position: absolute;
+    left: 10px; /* Ajusta la distancia desde el borde izquierdo del input */
+    top: 60%; /* Centra verticalmente */
+    transform: translateY(-50%); /* Alinea el texto verticalmente en el centro */
+    font-size: 1.2em;
+    cursor: text;
+    transition: 0.3s ease;
+}
+
+.formC label .field:placeholder-shown + span {
+    top: 50%; /* Centra verticalmente cuando el campo está vacío */
+    transform: translateY(-50%); /* Alinea el texto verticalmente en el centro */
+    font-size: 0.9em;
+}
+
+.formC label .field:focus + span,
+.formC label .field:valid + span {
+    color: #009929;
+    top: 16px; /* Ajusta la posición del texto cuando el input está en foco o tiene un valor */
+    font-size: 0.7em;
+    font-weight: 600;
+}
+
+
+.submit {
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transform: .3s ease;
+    background-color: #009929;
+}
+
+.submit:hover {
+    background-color: #009929;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+ul {
+    list-style: none;
+  }
+  
+  .example-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .example-2 .icon-content {
+    margin: 0 10px;
+    position: relative;
+  }
+  .example-2 .icon-content .tooltip {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffff;
+    padding: 6px 10px;
+    border-radius: 15px;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  .example-2 .icon-content:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    bottom: -40px;
+  }
+  .example-2 .icon-content a {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 20%;
+    color: #4d4d4d;
+    background-color: #ffff;
+    transition: all 0.3s ease-in-out;
+  }
+  .example-2 .icon-content a:hover {
+    box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 50%);
+  }
+  .example-2 .icon-content a svg {
+    position: relative;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+  }
+  .example-2 .icon-content a:hover {
+    color: white;
+  }
+  .example-2 .icon-content a .filled {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #ffff;
+    transition: all 0.3s ease-in-out;
+  }
+  .example-2 .icon-content a:hover .filled {
+    height: 100%;
+  }
+  .example-2 .icon-content a[data-social="email"] .filled,
+  .example-2 .icon-content a[data-social="email"] ~ .tooltip {
+    background-color: #bd081c;
+  }
+  .example-2 .icon-content a[data-social="facebook"] .filled,
+  .example-2 .icon-content a[data-social="facebook"] ~ .tooltip {
+    background-color: #3b5998 ;
+  }
+  .example-2 .icon-content a[data-social="youtube"] .filled,
+  .example-2 .icon-content a[data-social="youtube"] ~ .tooltip {
+    background-color: #bd081c;
+  }
+  .example-2 .icon-content a[data-social="whatsapp"] .filled,
+  .example-2 .icon-content a[data-social="whatsapp"] ~ .tooltip {
+    background-color: #25D366;
+  }
+  
+  .example-2 .icon-content a[data-social="instagram"] .filled,
+  .example-2 .icon-content a[data-social="instagram"] ~ .tooltip {
+        background: #833ab4;
+        background: linear-gradient(
+          to right,
+          #833ab4,#fd1d1d,#fcb045
+        );
+
+  }

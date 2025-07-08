@@ -1,0 +1,287 @@
+.Gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 1290px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.GalleryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas de carpetas */
+    gap: 20px;
+    width: 100%;
+    justify-items: center;
+}
+
+.Album {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.ImgGalery {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Mantener la proporción de imagen */
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.2s;
+    background-color: #f0f0f0; /* Simular carpeta con fondo gris */
+    border: 2px solid #ddd;
+}
+
+.ImgGalery img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ImgGalery img:hover {
+    filter: opacity(.9);
+    transform: scale(1.05);
+}
+
+.AlbumTitle {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+}
+
+.Pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.Pagination ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.Pagination li {
+    margin: 0 5px;
+}
+
+.Pagination button {
+    border: none;
+    background-color: #ddd;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.Pagination button:hover {
+    background-color: #bbb;
+}
+
+.Pagination .active {
+    background-color: #333;
+    color: #fff;
+}
+
+.AlbumCover {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.CoverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.AlbumOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.Album:hover .AlbumOverlay {
+  opacity: 1;
+}
+
+.Album:hover .CoverImage {
+  transform: scale(1.1);
+}
+
+.PhotoCount {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.AlbumTitle {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #00aa4d;
+  }
+  
+  .modalTitle {
+    font-size: 2rem;
+    font-weight: bolder;
+    margin: 0;
+    color: #ffffff;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #fff;
+  }
+  
+  .modalBody {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 16px;
+    height: calc(90vh - 70px);
+    color: #000;
+  }
+  
+  .imageContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    margin: 0 16px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .modalImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .imageDetails {
+    width: 30%;
+    padding: 0 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .description {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  
+  .arrowButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #00aa4d;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+    align-self: center;
+    color: #fff;
+  }
+  
+  .arrowButton:hover {
+    background-color: #067739;
+  }
+  
+  .prevButton {
+    margin-right: 16px;
+  }
+  
+  .nextButton {
+    margin-left: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .modalBody {
+      flex-direction: column;
+      height: auto;
+    }
+  
+    .imageContainer {
+      height: 50vh;
+      margin: 16px 0;
+    }
+  
+    .imageDetails {
+      width: 100%;
+      padding: 0;
+    }
+  
+    .arrowButton {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  
+    .prevButton {
+      left: 16px;
+    }
+  
+    .nextButton {
+      right: 16px;
+    }
+  }

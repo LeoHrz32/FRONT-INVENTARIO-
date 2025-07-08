@@ -1,0 +1,187 @@
+.ContPersonal {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 450px;
+    position: relative;
+    padding: 10px;
+    border-radius: 35px;
+    border-bottom: 10px;
+    top: 10px;
+}
+
+.Personal {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: auto;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.cardPersonal {
+    width: 400px;
+    height: 400px;
+    position: relative;
+    padding: 10px;
+    border-radius: 35px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px;
+    border: 1px solid rgba(7, 7, 7, 0.12);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.cardPersonal:hover {
+    transform: translateY(-5px); 
+}
+
+.cardPersonal .Miembros {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.PersonalImg {
+    padding-top: -10px;
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.PersonalImg img {
+    padding-top: -10px;
+    width: 100%;
+    height: 200px;
+}
+
+.TextContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.NamePersonal {
+    margin: 0;
+    color: black;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.TextPersonal {
+    margin: 0;
+    color: black;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.iconPersonal {
+    top:  -30px;
+    width: 100%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.cardMiembros {
+    display: flex;
+    height: 70px;
+    width: 270px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.cardMiembros svg {
+    position: absolute;
+    display: flex;
+    width: 60%;
+    height: 100%;
+    font-size: 24px;
+    font-weight: 700;
+    opacity: 1;
+    transition: opacity 0.25s;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.cardMiembros .social-link1,
+.cardMiembros .social-link2,
+.cardMiembros .social-link3,
+.cardMiembros .social-link4 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: whitesmoke;
+    font-size: 24px;
+    text-decoration: none;
+    transition: 0.25s;
+    border-radius: 50px;
+}
+
+.cardMiembros svg {
+    transform: scale(1);
+}
+
+.cardMiembros .social-link1:hover {
+    background: #f09433;
+    background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f09433', endColorstr='#bc1888', GradientType=1);
+    animation: bounce_613 0.4s linear;
+}
+
+.cardMiembros .social-link2:hover {
+    background-color: #00ccff;
+    animation: bounce_613 0.4s linear;
+}
+
+.cardMiembros .social-link3:hover {
+    background-color: red;
+    animation: bounce_613 0.4s linear;
+}
+
+.cardMiembros .social-link4:hover {
+    background-color: #12a50b;
+    animation: bounce_613 0.4s linear;
+}
+
+@keyframes bounce_613 {
+    40% {
+        transform: scale(1.4);
+    }
+
+    60% {
+        transform: scale(0.8);
+    }
+
+    80% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

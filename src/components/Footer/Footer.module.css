@@ -1,0 +1,144 @@
+.SectionPadding {
+    padding: 2rem 2rem; 
+}
+
+.Footer {
+    background-color: #282c34; 
+    color: #ffffff; 
+    padding: 1.5rem 2rem; 
+    height: 320px;
+    position: relative;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    top: 30px;
+}
+
+.FooterLinks {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1rem; /* Reducido el margen */
+}
+
+.FooterLinksDiv {
+    width: 120px; /* Reducido el ancho */
+    margin: 0.5rem; /* Reducido el margen */
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.FooterLinksDiv h4 {
+    font-size: 14px; /* Reducido el tamaño de fuente */
+    font-weight: bold;
+    color: #ffffff; /* Color de los títulos en blanco */
+    margin-bottom: 0.5rem; /* Reducido el margen */
+}
+
+.FooterLinksDiv p {
+    font-size: 12px; /* Reducido el tamaño de fuente */
+    color: #b0b0b0; /* Color de texto de los enlaces */
+    margin: 0.3rem 0; /* Reducido el margen */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.FooterLinksDiv p:hover {
+    color: #14ff72cb; /* Color de enlace atractivo al pasar el ratón */
+}
+
+a {
+    color: inherit; /* Hereda el color del elemento padre */
+    text-decoration: none;
+}
+
+.SocialMedia {
+    display: flex;
+    gap: 0.75rem; /* Reducido el espacio entre los iconos */
+}
+
+.SocialMedia img {
+    width: 20px; /* Reducido el tamaño de los iconos */
+    transition: transform 0.3s ease;
+}
+
+.SocialMedia img:hover {
+    transform: scale(1.1); /* Efecto de zoom al pasar el ratón */
+}
+
+.FooterBelow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem 0; /* Reducido el margen */
+}
+
+.FooterBelowLinks {
+    display: flex;
+    flex-direction: row;
+}
+
+.FooterBelowLinks a {
+    margin: 0 0.75rem; /* Reducido el margen */
+}
+
+.FooterBelowLinks p {
+    font-size: 12px; /* Reducido el tamaño de fuente */
+    color: #b0b0b0; /* Color de texto de los enlaces */
+    font-weight: 600;
+    margin: 0;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #b0b0b0; /* Color de la línea horizontal */
+    width: 100%;
+}
+
+.FooterCopyright {
+    font-size: 12px; /* Reducido el tamaño de fuente */
+    color: #b0b0b0; /* Color de derechos reservados */
+    font-weight: 600;
+}
+
+/* Media queries para dispositivos más pequeños */
+
+@media screen and (max-width: 850px) {
+    .FooterBelow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .FooterBelowLinks {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .FooterLinks {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .FooterLinksDiv {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .FooterLinksDiv h4 {
+        font-size: 12px; /* Reducido aún más el tamaño de fuente */
+    }
+
+    .FooterLinksDiv p {
+        font-size: 10px; /* Reducido aún más el tamaño de fuente */
+    }
+}

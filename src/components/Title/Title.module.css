@@ -1,0 +1,20 @@
+.titlecontainer {
+    width: 100%;
+    background-color: transparent;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 50%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding-top: 1px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.titlecontent {
+    font-size: 5em; 
+    font-weight: bold; 
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: #00aa4d;
+}
