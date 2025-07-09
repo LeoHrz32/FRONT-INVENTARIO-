@@ -34,10 +34,9 @@ const ModalTablaView = ({ onClose, tabla, columnas }) => {
             columnas.map((columna, index) => (
               <div
                 key={index}
-                className="p-4 bg-secondary-200 rounded-lg shadow flex justify-between items-center text-gray-800"
+                className="p-4 bg-secondary-200 rounded-lg shadow flex justify-between items-center text-white-800"
               >
-                <span className="font-semibold">{columna.nombre_columna}</span>
-                <span className="italic text-sm">{columna.tipo_columna}</span>
+                <span className="font-semibold">{columna.name}</span>
               </div>
             ))
           )}

@@ -7,14 +7,14 @@ import TableCell from '../../components/table/TableCell';
 import Pagination from '../../components/table/Pagination';
 import { CreateButton, SearchBar, ItemsPerPageSelect } from '../../components/table/TopBarElements';
 import { RiDeleteBin6Line, RiEdit2Line, RiEyeLine } from 'react-icons/ri';
-import { useTablas } from "../../context/tablas/tablasContext";
-
+import { useTablas } from '../../context/tablas/tablasContext';
 import ModalTablaCreateForm from './tablasCreate';
 import ModalTablaEditForm from './tablasEdit';
 import ModalTablaView from './tablasView';
 import LoadingScreen from '../../components/LoadingScreen';
+import { show_alert } from '../../components/alertFunctions';
 
-function DynamicTableView() {
+const DynamicTableView = () => {
     const {
         tablas,
         columns,
@@ -23,11 +23,6 @@ function DynamicTableView() {
         createTabla,
         updateTabla,
         deleteTabla,
-        getPaginatedTablas,
-        searchTablas,
-        totalPages,
-        currentPage,
-        searchQuery,
         errors,
         messages,
         clearErrors,
@@ -35,73 +30,76 @@ function DynamicTableView() {
     } = useTablas();
 
     const [filteredData, setFilteredData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showColumnsModal, setShowColumnsModal] = useState(false);
+    const [showViewModal, setShowViewModal] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Load tablas
+    // Inicializar datos
     useEffect(() => {
         getAllTablas();
     }, []);
 
+    // Manejo de mensajes
     useEffect(() => {
-        setFilteredData(tablas);
-    }, [tablas]);
-
-    useEffect(() => {
-        if (messages.length) clearMessages();
-        if (errors.length) clearErrors();
+        if (messages.length) {
+            show_alert(messages[0], 'success');
+            clearMessages();
+        }
+        if (errors.length) {
+            show_alert(errors[0], 'error');
+            clearErrors();
+        }
     }, [messages, errors]);
 
-    const handleSearch = (query) => {
-        searchTablas(query);
-    };
+    // Filtrado por búsqueda
+    useEffect(() => {
+        const filtered = tablas.filter(t =>
+            t.nombre_tabla?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredData(filtered);
+        setCurrentPage(1);
+    }, [searchQuery, tablas]);
 
-    const handlePageChange = (page) => {
-        getPaginatedTablas(page, itemsPerPage);
-    };
-
-    const handleItemsPerPageChange = (perPage) => {
+    // Paginación
+    const handlePageChange = page => setCurrentPage(page);
+    
+    const handleItemsPerPageChange = perPage => {
         setItemsPerPage(perPage);
-        getPaginatedTablas(1, perPage);
+        setCurrentPage(1);
     };
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-    const handleCreate = () => {
-        setShowCreateModal(true);
-    };
-
-    const handleEdit = (table) => {
+    // Acciones
+    const handleCreateClick = () => setShowCreateModal(true);
+    const handleEditClick = table => {
         setSelectedTable(table);
         setShowEditModal(true);
     };
-
-    const handleViewColumns = (table) => {
+    const handleViewClick = table => {
         setSelectedTable(table);
         getColumnasTabla(table.nombre_tabla);
-        setShowColumnsModal(true);
+        setShowViewModal(true);
     };
-
-    const handleDelete = (table) => {
-        deleteTabla(table.nombre_tabla);
-    };
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+    const handleDeleteClick = table => deleteTabla(table.nombre_tabla);
 
     return (
         <div className="pb-4 overflow-y-auto">
-            <div className="flex justify-between items-center mb-2 gap-4">
-                <CreateButton onClick={handleCreate} />
-                <div className="flex gap-2">
-                    <SearchBar onSearch={handleSearch} value={searchQuery} />
+            <div className="flex lg:flex-row justify-between items-center mb-1 gap-4">
+                <div className="flex">
+                    <CreateButton onClick={handleCreateClick} />
+                </div>
+                <div className="flex">
+                    <SearchBar onSearch={setSearchQuery} />
                     <ItemsPerPageSelect value={itemsPerPage} onChange={handleItemsPerPageChange} />
                 </div>
             </div>
-
-            {currentData.length === 0 ? (
+            {currentItems.length === 0 ? (
                 <p className="text-center">No hay tablas disponibles</p>
             ) : (
                 <Table>
@@ -111,19 +109,19 @@ function DynamicTableView() {
                         <TableCell>Acciones</TableCell>
                     </TableHead>
                     <TableBody>
-                        {currentData.map((table, idx) => (
+                        {currentItems.map((table, idx) => (
                             <TableRow key={idx}>
                                 <TableCell>{table.nombre_tabla}</TableCell>
                                 <TableCell>{new Date(table.fecha_creacion).toLocaleString()}</TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
-                                        <button onClick={() => handleViewColumns(table)} className="p-2 rounded bg-blue-500 text-white">
+                                        <button onClick={() => handleViewClick(table)} className="p-2 rounded bg-blue-500 text-white">
                                             <RiEyeLine />
                                         </button>
-                                        <button onClick={() => handleEdit(table)} className="p-2 rounded bg-yellow-500 text-white">
+                                        <button onClick={() => handleEditClick(table)} className="p-2 rounded bg-yellow-500 text-white">
                                             <RiEdit2Line />
                                         </button>
-                                        <button onClick={() => handleDelete(table)} className="p-2 rounded bg-red-500 text-white">
+                                        <button onClick={() => handleDeleteClick(table)} className="p-2 rounded bg-red-500 text-white">
                                             <RiDeleteBin6Line />
                                         </button>
                                     </div>
@@ -133,35 +131,28 @@ function DynamicTableView() {
                     </TableBody>
                     <Pagination
                         totalItems={filteredData.length}
-                        itemsPerPage={itemsPerPage}
+                        itemsPerPage={5}
                         currentPage={currentPage}
-                        onPageChange={handlePageChange}
+                        onPageChange={setCurrentPage}
                     />
                 </Table>
             )}
 
+
             {/* Modales */}
             {showCreateModal && (
-                <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-900 bg-opacity-50">
-                    <ModalTablaCreateForm onClose={() => setShowCreateModal(false)} />
-                </div>
+                <ModalTablaCreateForm onClose={() => setShowCreateModal(false)} />
             )}
-
             {showEditModal && (
-                <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-900 bg-opacity-50">
-                    <ModalTablaEditForm table={selectedTable} onClose={() => setShowEditModal(false)} />
-                </div>
+                <ModalTablaEditForm tabla={selectedTable} onClose={() => setShowEditModal(false)} />
             )}
-
-            {showColumnsModal && (
-                <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-900 bg-opacity-50">
-                    <ModalTablaView tabla={selectedTable} columnas={columns} onClose={() => setShowColumnsModal(false)} />
-                </div>
+            {showViewModal && (
+                <ModalTablaView tabla={selectedTable} columnas={columns} onClose={() => setShowViewModal(false)} />
             )}
 
             {loading && <LoadingScreen />}
         </div>
     );
-}
+};
 
 export default DynamicTableView;

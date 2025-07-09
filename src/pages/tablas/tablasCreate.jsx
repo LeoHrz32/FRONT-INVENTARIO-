@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RiTableLine, RiAddLine, RiCloseLine } from "react-icons/ri";
+import { RiTableLine, RiAddLine, RiCloseLine, RiUserLine } from "react-icons/ri";
 import InputField from '../../components/form/InputField';
 import FormLabel from '../../components/form/FormLabel';
 import CreateCancelButtons from '../../components/form/CreateCancelButtons';
@@ -24,22 +24,27 @@ const ModalTablaCreateForm = ({ onClose }) => {
   const [errors, setErrors] = useState({});
 
   const validateField = (name, value) => {
+    const sanitized = value.trim().replace(/\s+/g, '_'); // Reemplaza espacios por guion bajo
     if (name === 'nombre_tabla') {
-      if (!value.trim()) return 'El nombre de tabla es obligatorio.';
-      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(value)) return 'Nombre inválido.';
+      if (!sanitized) return 'El nombre de tabla es obligatorio.';
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(sanitized)) return 'Nombre inválido.';
     }
     return '';
   };
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
+    const sanitized = value.replace(/\s+/g, '_');
+    setFormData(prev => ({ ...prev, [name]: sanitized }));
+    setErrors(prev => ({ ...prev, [name]: validateField(name, sanitized) }));
   };
 
+
   const handleCampoChange = (index, value) => {
+    const sanitized = value.replace(/\s+/g, '_');
     const nuevos = [...formData.campos];
-    nuevos[index] = value;
+    nuevos[index] = sanitized;
     setFormData({ ...formData, campos: nuevos });
   };
 
@@ -93,7 +98,7 @@ const ModalTablaCreateForm = ({ onClose }) => {
   return (
     <>
       <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-lg">
+        <div className="bg-secondary-100 rounded-xl p-6 w-full max-w-lg">
           <div className="flex justify-between items-center mb-4">
             <Heading level={1}>Crear <span className="text-primary">Tabla</span></Heading>
             <button onClick={handleCancel} className="text-gray-400 hover:text-black">

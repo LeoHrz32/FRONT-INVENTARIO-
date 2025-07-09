@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LayoutAdmin from './layouts/LayoutAdmin';
 import UserTable from './pages/users/userPage';
 import DynamicTableView from './pages/tablas/tablasPage';
+import RegistrosPage from './pages/registros/registrosPage';
 import Error404 from './pages/404/Error404';
 import LoginPage from './pages/users/login';
 
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/tablas" element={<LayoutAdmin />}>
             <Route index element={<DynamicTableView />} />
+          </Route>
+          <Route path="/registros" element={<LayoutAdmin />}>
+            <Route index element={<RegistrosPage />} />
           </Route>
         </Route>
         {/* Página 404 para cualquier otra ruta */}

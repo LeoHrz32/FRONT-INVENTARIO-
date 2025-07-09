@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { RiGraduationCapLine, RiArrowRightSLine, RiMenu3Line, RiCloseLine,RiUser3Line,RiTableLine } from "react-icons/ri";
+import { RiGraduationCapLine, RiArrowRightSLine, RiMenu3Line, RiCloseLine, RiUser3Line, RiTableLine } from "react-icons/ri";
 // import DARKLOGO from "./../assets/images/ISOTIPODARK.png";
 import Fondo from "./../assets/images/Fondo.jpg"
 
@@ -62,7 +62,18 @@ const Sidebar = () => {
                   className={({ isActive }) => `w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors ${isActive ? "bg-secondary-900" : ""}`}
                 >
                   <span className="flex items-center gap-4">
-                    <RiTableLine  className="text-primary" /> Tablas De Inventario
+                    <RiTableLine className="text-primary" /> Tablas De Inventario
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/registros"
+                  onClick={() => handleNavClick("registros")}
+                  className={({ isActive }) => `w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors ${isActive ? "bg-secondary-900" : ""}`}
+                >
+                  <span className="flex items-center gap-4">
+                    <RiTableLine className="text-primary" /> Registros
                   </span>
                 </NavLink>
               </li>

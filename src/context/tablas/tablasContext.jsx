@@ -1,3 +1,5 @@
+// src/context/tablas/tablasContext.jsx
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import {
     getAllTableNamesRequest,
@@ -8,7 +10,7 @@ import {
     deleteDynamicTableRequest,
     getPaginatedTablesRequest,
     searchTablesRequest,
-} from "../../api/tablasDeRegistroApi/tablasApi"; // Ajusta según tu estructura
+} from "../../api/tablasDeRegistroApi/tablasApi";
 
 export const TablaContext = createContext();
 
@@ -28,6 +30,7 @@ export const TablaProvider = ({ children }) => {
     const [messages, setMessages] = useState([]);
     const [tablasUpdated, setTablasUpdated] = useState(false);
 
+    // Opcional: estos dos ya no se usan para client‑side pagination
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
@@ -37,7 +40,7 @@ export const TablaProvider = ({ children }) => {
         setErrors([message]);
     };
 
-    // Obtener todas las tablas (metadata)
+    // 1️⃣ Obtener todas las tablas (nombre + fecha)
     const getAllTablas = async () => {
         try {
             const res = await getTableMetadataRequest();
@@ -47,7 +50,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Obtener columnas de una tabla específica
+    // 2️⃣ Obtener columnas de una tabla específica
     const getColumnasTabla = async (nombre) => {
         try {
             const res = await getTableColumnsRequest(nombre);
@@ -57,7 +60,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Crear nueva tabla dinámica
+    // 3️⃣ Crear nueva tabla
     const createTabla = async (data) => {
         try {
             const res = await createDynamicTableRequest(data);
@@ -68,7 +71,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Actualizar estructura de una tabla
+    // 4️⃣ Actualizar tabla
     const updateTabla = async (nombre, cambios) => {
         try {
             const res = await updateDynamicTableRequest(nombre, cambios);
@@ -79,7 +82,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Eliminar tabla
+    // 5️⃣ Eliminar tabla
     const deleteTabla = async (nombre) => {
         try {
             await deleteDynamicTableRequest(nombre);
@@ -90,7 +93,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Obtener paginación
+    // 6️⃣ (Ya no necesario para client‑side) Paginación via API
     const getPaginatedTablas = async (page = 1, perPage = 5) => {
         try {
             const res = await getPaginatedTablesRequest(page, perPage);
@@ -102,7 +105,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Buscar tabla por nombre
+    // 7️⃣ (Ya no necesario para client‑side) Búsqueda via API
     const searchTablas = async (query) => {
         try {
             const res = await searchTablesRequest(query);
@@ -114,7 +117,7 @@ export const TablaProvider = ({ children }) => {
         }
     };
 
-    // Efectos
+    // Efecto inicial y para refrescar tras cambios
     useEffect(() => {
         getAllTablas();
     }, []);
@@ -126,6 +129,7 @@ export const TablaProvider = ({ children }) => {
         }
     }, [tablasUpdated]);
 
+    // Limpieza automática de errores
     useEffect(() => {
         if (errors.length > 0) {
             const t = setTimeout(() => setErrors([]), 3000);
@@ -137,26 +141,28 @@ export const TablaProvider = ({ children }) => {
     const clearErrors = () => setErrors([]);
 
     return (
-        <TablaContext.Provider value={{
-            tablas,
-            selectedTabla,
-            setSelectedTabla,
-            columns,
-            getAllTablas,
-            getColumnasTabla,
-            createTabla,
-            updateTabla,
-            deleteTabla,
-            getPaginatedTablas,
-            searchTablas,
-            totalPages,
-            currentPage,
-            searchQuery,
-            errors,
-            messages,
-            clearMessages,
-            clearErrors
-        }}>
+        <TablaContext.Provider
+            value={{
+                tablas,
+                selectedTabla,
+                setSelectedTabla,
+                columns,
+                getAllTablas,
+                getColumnasTabla,
+                createTabla,
+                updateTabla,
+                deleteTabla,
+                getPaginatedTablas,
+                searchTablas,
+                totalPages,
+                currentPage,
+                searchQuery,
+                errors,
+                messages,
+                clearMessages,
+                clearErrors,
+            }}
+        >
             {children}
         </TablaContext.Provider>
     );

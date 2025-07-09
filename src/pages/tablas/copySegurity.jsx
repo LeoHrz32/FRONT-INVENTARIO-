@@ -9,17 +9,13 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { show_alert } from '../../components/alertFunctions';
 
 const ModalTablaEditForm = ({ tabla, onClose }) => {
-  const { updateTabla, columns, getColumnasTabla } = useTablas();
+  const { updateTabla, columns } = useTablas();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ campos_add: [], campos_rename: [] });
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    if (tabla?.nombre_tabla) {
-      console.log("🔄 Obteniendo columnas para tabla:", tabla.nombre_tabla);
-      getColumnasTabla(tabla.nombre_tabla);
-    }
-  }, [tabla]);
+  console.log('📥 ModalTablaEditForm: tabla seleccionada:', tabla);
+  console.log('📥 Columnas del contexto:', columns);
 
   useEffect(() => {
     if (tabla && Array.isArray(columns) && columns.length > 0) {
@@ -30,7 +26,7 @@ const ModalTablaEditForm = ({ tabla, onClose }) => {
       });
       setErrors({});
     }
-  }, [columns, tabla]);
+  }, [tabla, columns]);
 
   const validateRename = (nuevo) => {
     if (!nuevo.trim()) return 'El nombre no puede estar vacío.';
@@ -115,12 +111,10 @@ const ModalTablaEditForm = ({ tabla, onClose }) => {
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
       <div className="bg-secondary-100 rounded-xl p-6 w-full max-w-lg overflow-auto max-h-[90vh]">
         <div className="flex justify-between items-center mb-4">
+          <Heading level={1}>Editar <span className="text-primary">{tabla.nombre_tabla}</span></Heading>
           <button onClick={handleCancel} className="text-gray-400 hover:text-white">
             <RiCloseLine size={24} />
           </button>
-          <th></th>
-          <Heading level={1}>Editar <span className="text-primary">{tabla.nombre_tabla}</span></Heading>
-
         </div>
         <Form onSubmit={handleSubmit}>
           <div className="mb-6">
@@ -148,13 +142,9 @@ const ModalTablaEditForm = ({ tabla, onClose }) => {
 
           <div className="mb-6">
             <span className="font-medium">Renombrar Campos</span>
-            <th></th>
-            <th></th>
-            <th></th>
-
             {formData.campos_rename.map((r, idx) => (
               <div key={idx} className="flex items-center mb-2">
-                {/* <span className="mr-2 font-mono bg-gray-444 px-2 py-1 rounded">{r.antiguo}</span> */}
+                <span className="mr-2 font-mono bg-gray-200 px-2 py-1 rounded">{r.antiguo}</span>
                 <InputField
                   value={r.nuevo}
                   onChange={e => handleRenameChange(idx, e.target.value)}

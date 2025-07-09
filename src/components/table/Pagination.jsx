@@ -16,7 +16,7 @@ function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange }) {
                 disabled={currentPage === 1}
                 className={`px-3 py-1 mx-1 border rounded ${currentPage === 1 ? 'bg-secondary-900 text-gray-700 border-gray-700 cursor-not-allowed' : 'bg-secondary-900 text-white hover:bg-gray-500'}`}
             >
-                Previous
+                Anterior
             </button>
             {Array.from({ length: totalPages }, (_, index) => (
                 <button
@@ -32,7 +32,7 @@ function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange }) {
                 disabled={currentPage === totalPages}
                 className={`px-3 py-1 mx-1 border rounded ${currentPage === totalPages ? 'bg-secondary-900 text-gray-700 border-gray-700 cursor-not-allowed' : 'bg-secondary-900 text-white hover:bg-gray-500'}`}
             >
-                Next
+                Siguiente
             </button>
         </div>
     );
