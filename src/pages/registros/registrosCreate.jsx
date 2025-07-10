@@ -12,47 +12,56 @@ import { show_alert } from '../../components/alertFunctions';
 import { useRegistros } from "../../context/registros/registrosContext";
 
 const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
-    const { createRegistro } = useRegistros();
+    // ← DESDE context viene crearRegistro, no createRegistro
+    const { crearRegistro } = useRegistros();
     const [loading, setLoading] = useState(false);
+
+    const camposForm = Array.isArray(schema)
+        ? schema.filter(col => col.name.toLowerCase() !== 'id')
+        : [];
+
     const [formData, setFormData] = useState(
-        schema.reduce((acc, col) => ({ ...acc, [col.name]: '' }), {})
+        camposForm.reduce((acc, col) => ({ ...acc, [col.name]: '' }), {})
     );
     const [errors, setErrors] = useState({});
 
-    const handleChange = (e) => {
+    const handleChange = e => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-
-        if (!value.trim()) {
-            setErrors(prev => ({ ...prev, [name]: 'Este campo es obligatorio.' }));
-        } else {
-            setErrors(prev => ({ ...prev, [name]: '' }));
-        }
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({
+            ...prev,
+            [name]: !value.trim() ? 'Este campo es obligatorio.' : ''
+        }));
     };
 
     const validateForm = () => {
-        const tempErrors = {};
+        const temp = {};
         for (const key in formData) {
-            if (!formData[key].trim()) {
-                tempErrors[key] = 'Este campo es obligatorio.';
-            }
+            if (!formData[key].trim()) temp[key] = 'Este campo es obligatorio.';
         }
-        setErrors(tempErrors);
-        return Object.keys(tempErrors).length === 0;
+        setErrors(temp);
+        return Object.keys(temp).length === 0;
     };
 
-    const handleCreate = async (e) => {
+    const handleCreate = async e => {
         e.preventDefault();
-
         if (!validateForm()) return;
+
+        const payload = { ...formData };
+        delete payload.id;
+
+        console.log("🗃️ tableName:", tableName);
+        console.log("📤 payload:", payload);
 
         try {
             setLoading(true);
-            await createRegistro(tableName, formData);
-            show_alert(`Registro añadido correctamente en la tabla ${tableName}`, 'success');
+            // ← Aquí ahora sí llamas la función correcta
+            await crearRegistro(tableName, payload);
+            console.log("✅ Registro creado en tabla", tableName);
+            show_alert(`Registro añadido correctamente en ${tableName}`, 'success');
             onClose();
         } catch (error) {
-            console.error('Error creando registro:', error);
+            console.error("❌ Error al crear el registro:", error.response?.data || error.message);
             show_alert('Error al crear el registro.', 'error');
         } finally {
             setLoading(false);
@@ -64,9 +73,19 @@ const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
         onClose();
     };
 
+    if (!Array.isArray(schema) || schema.length === 0) {
+        return (
+            <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
+                <div className="bg-white p-10 rounded-xl shadow-lg">
+                    <p className="text-center text-lg">⏳ Cargando campos del formulario...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
-            <div className="absolute inset-0 justify-center items-center z-50 bg-gray-900 bg-opacity-50 overflow-auto">
+            <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
                 <DivForm1>
                     <DivForm2>
                         <div className="relative flex items-center mb-10 mt-4">
@@ -79,7 +98,7 @@ const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
                         </div>
                         <Form onSubmit={handleCreate}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {schema.map((col) => (
+                                {camposForm.map(col => (
                                     <FormLabel key={col.name} label={
                                         <span>{col.name} <span className="text-red-500">*</span></span>
                                     }>
@@ -90,11 +109,13 @@ const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
                                             value={formData[col.name]}
                                             onChange={handleChange}
                                         />
-                                        {errors[col.name] && <p className="text-red-500">{errors[col.name]}</p>}
+                                        {errors[col.name] && (
+                                            <p className="text-red-500 text-sm mt-1">{errors[col.name]}</p>
+                                        )}
                                     </FormLabel>
                                 ))}
                             </div>
-                            <CreateCancelButtons name='Registrar' onCreate={handleCreate} onCancel={handleCancel} />
+                            <CreateCancelButtons name="Registrar" onCreate={handleCreate} onCancel={handleCancel} />
                         </Form>
                     </DivForm2>
                 </DivForm1>

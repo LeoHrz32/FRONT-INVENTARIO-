@@ -9,75 +9,95 @@ import DivForm2 from '../../components/form/DivForm2';
 import Form from '../../components/form/Form';
 import LoadingScreen from '../../components/LoadingScreen';
 import { show_alert } from '../../components/alertFunctions';
-import { useRegistros } from "../../context/registros/registrosContext";
+import { useRegistros } from '../../context/registros/registrosContext';
 
-const ModalRegistroEditForm = ({ onClose, tableName, schema, record }) => {
-    const { updateRegistro } = useRegistros();
+const ModalRegistroEditForm = ({ onClose, tableName, schema, registro }) => {
+    const { actualizarRegistro } = useRegistros();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        if (record) {
-            setFormData({ ...record });
-        }
-    }, [record]);
+    // Excluir campo id del formulario
+    const camposForm = Array.isArray(schema)
+        ? schema.filter(col => col.name.toLowerCase() !== 'id')
+        : [];
 
-    const handleChange = (e) => {
+    // Inicializa formData con los valores del registro
+    useEffect(() => {
+        if (registro && camposForm.length) {
+            const initial = {};
+            camposForm.forEach(col => {
+                initial[col.name] = registro[col.name] ?? '';
+            });
+            setFormData(initial);
+        }
+    }, [registro, camposForm]);
+
+    // Manejo de cambios
+    const handleChange = e => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-
-        if (!value.trim()) {
-            setErrors(prev => ({ ...prev, [name]: 'Este campo es obligatorio.' }));
-        } else {
-            setErrors(prev => ({ ...prev, [name]: '' }));
-        }
+        setErrors(prev => ({
+            ...prev,
+            [name]: !value.toString().trim() ? 'Este campo es obligatorio.' : ''
+        }));
     };
 
+    // Validación completa
     const validateForm = () => {
-        const tempErrors = {};
+        const temp = {};
         for (const key in formData) {
-            if (!formData[key]?.toString().trim()) {
-                tempErrors[key] = 'Este campo es obligatorio.';
-            }
+            if (!formData[key].toString().trim()) temp[key] = 'Este campo es obligatorio.';
         }
-        setErrors(tempErrors);
-        return Object.keys(tempErrors).length === 0;
+        setErrors(temp);
+        return Object.keys(temp).length === 0;
     };
 
-    const handleEdit = async (e) => {
+    // Envío de actualización
+    const handleEdit = async e => {
         e.preventDefault();
         if (!validateForm()) return;
 
+        const payload = { ...formData };
+        console.log('🗃️ tableName (edit):', tableName);
+        console.log('📤 edit payload:', payload);
+
         try {
             setLoading(true);
-            const pk = schema.find(c => c.primary_key)?.name || 'id';
-            const pkValue = formData[pk];
-
-            if (!pkValue) {
-                show_alert("No se encontró la clave primaria del registro.", "error");
-                return;
-            }
-
-            await updateRegistro(tableName, pk, pkValue, formData);
-            show_alert("Registro actualizado correctamente", "success");
+            // pk dinámico
+            const pkField = registro.hasOwnProperty('id') ? 'id' : schema.find(c => c.primary_key)?.name;
+            const pkValue = registro[pkField];
+            await actualizarRegistro(tableName, pkField, pkValue, payload);
+            console.log('✅ Registro actualizado en tabla', tableName);
+            show_alert(`Registro actualizado correctamente en ${tableName}`, 'success');
             onClose();
-        } catch (err) {
-            console.error("Error al actualizar:", err);
-            show_alert("Ocurrió un error al actualizar el registro.", "error");
+        } catch (error) {
+            console.error('❌ Error al actualizar el registro:', error.response?.data || error.message);
+            show_alert('Error al actualizar el registro.', 'error');
         } finally {
             setLoading(false);
         }
     };
 
     const handleCancel = () => {
-        show_alert("Edición cancelada.", "info");
+        show_alert('Edición cancelada.', 'info');
         onClose();
     };
 
+    // Si aún no hay registro o campos cargados muestro loading
+    if (!registro || !camposForm.length) {
+        return (
+            <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
+                <div className="bg-white p-10 rounded-xl shadow-lg">
+                    <p className="text-center text-lg">⏳ Cargando datos del registro...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
-            <div className="absolute inset-0 justify-center items-center z-50 bg-gray-900 bg-opacity-50 overflow-auto">
+            <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
                 <DivForm1>
                     <DivForm2>
                         <div className="relative flex items-center mb-10 mt-4">
@@ -90,7 +110,7 @@ const ModalRegistroEditForm = ({ onClose, tableName, schema, record }) => {
                         </div>
                         <Form onSubmit={handleEdit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {schema.map((col) => (
+                                {camposForm.map(col => (
                                     <FormLabel key={col.name} label={
                                         <span>{col.name} <span className="text-red-500">*</span></span>
                                     }>
@@ -98,19 +118,16 @@ const ModalRegistroEditForm = ({ onClose, tableName, schema, record }) => {
                                             type="text"
                                             name={col.name}
                                             placeholder={`Ingrese ${col.name}`}
-                                            value={formData[col.name] ?? ''}
+                                            value={formData[col.name]}
                                             onChange={handleChange}
-                                            readOnly={col.name === 'id'} // puedes personalizar esto
                                         />
-                                        {errors[col.name] && <p className="text-red-500">{errors[col.name]}</p>}
+                                        {errors[col.name] && (
+                                            <p className="text-red-500 text-sm mt-1">{errors[col.name]}</p>
+                                        )}
                                     </FormLabel>
                                 ))}
                             </div>
-                            <CreateCancelButtons
-                                name="Actualizar"
-                                onCreate={handleEdit}
-                                onCancel={handleCancel}
-                            />
+                            <CreateCancelButtons name="Actualizar" onCreate={handleEdit} onCancel={handleCancel} />
                         </Form>
                     </DivForm2>
                 </DivForm1>

@@ -67,7 +67,7 @@ const DynamicTableView = () => {
 
     // Paginación
     const handlePageChange = page => setCurrentPage(page);
-    
+
     const handleItemsPerPageChange = perPage => {
         setItemsPerPage(perPage);
         setCurrentPage(1);
@@ -115,10 +115,10 @@ const DynamicTableView = () => {
                                 <TableCell>{new Date(table.fecha_creacion).toLocaleString()}</TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
-                                        <button onClick={() => handleViewClick(table)} className="p-2 rounded bg-blue-500 text-white">
+                                        <button onClick={() => handleViewClick(table)} className="rounded-lg transition-colors text-white bg-secondary-100 hover:bg-secondary-500 p-2">
                                             <RiEyeLine />
                                         </button>
-                                        <button onClick={() => handleEditClick(table)} className="p-2 rounded bg-yellow-500 text-white">
+                                        <button onClick={() => handleEditClick(table)} className="rounded-lg transition-colors text-white bg-secondary-100 hover:bg-secondary-500 p-2">
                                             <RiEdit2Line />
                                         </button>
                                         <button onClick={() => handleDeleteClick(table)} className="p-2 rounded bg-red-500 text-white">
@@ -137,7 +137,6 @@ const DynamicTableView = () => {
                     />
                 </Table>
             )}
-
 
             {/* Modales */}
             {showCreateModal && (

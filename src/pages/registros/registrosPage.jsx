@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useRegistros } from "../../context/registros/registrosContext";
 import Table from "../../components/table/Table";
 import TableHead from "../../components/table/TableHead";
@@ -6,15 +6,14 @@ import TableBody from "../../components/table/TableBody";
 import TableRow from "../../components/table/TableRow";
 import TableCell from "../../components/table/TableCell";
 import Pagination from "../../components/table/Pagination";
-import {
-    CreateButton,
-    SearchBar,
-    ItemsPerPageSelect,
-} from "../../components/table/TopBarElements";
+import { CreateButton, SearchBar, ItemsPerPageSelect } from "../../components/table/TopBarElements";
 import ModalCrearRegistro from "./registrosCreate";
 import ModalEditarRegistro from "./registrosEdit";
 import ModalViewRegistro from "./registrosView";
 import { RiDeleteBin6Line, RiEdit2Line, RiEyeLine } from "react-icons/ri";
+import SelectForm from "../../components/form/SelectForm";
+
+const MAX_COLUMNAS_VISIBLES = 5;
 
 const RegistrosPage = () => {
     const {
@@ -33,19 +32,22 @@ const RegistrosPage = () => {
         mensajes,
         limpiarErrores,
         limpiarMensajes,
+        schema,
     } = useRegistros();
 
-    // Local state
     const [filteredData, setFilteredData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [showModalCrear, setShowModalCrear] = useState(false);
     const [showModalEditar, setShowModalEditar] = useState(false);
     const [showModalView, setShowModalView] = useState(false);
-
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Effect: update filteredData when registros or searchQuery changes
+    const selectOptions = useMemo(
+        () => tablas.map((t) => ({ label: t, value: t })),
+        [tablas]
+    );
+
     useEffect(() => {
         let data = Array.isArray(registros) ? registros : [];
         if (searchQuery) {
@@ -60,19 +62,10 @@ const RegistrosPage = () => {
         setCurrentPage(1);
     }, [registros, searchQuery]);
 
-    // Load tablas on mount
     useEffect(() => {
         obtenerTablas();
     }, []);
 
-    // Load registros when tablaSeleccionada changes
-    useEffect(() => {
-        if (tablaSeleccionada) {
-            obtenerRegistros(tablaSeleccionada);
-        }
-    }, [tablaSeleccionada]);
-
-    // Handle messages and errors
     useEffect(() => {
         if (mensajes.length) {
             alert(mensajes[0]);
@@ -84,24 +77,54 @@ const RegistrosPage = () => {
         }
     }, [mensajes, errores]);
 
-    // Pagination
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+    const columnas = currentData.length > 0 ? Object.keys(currentData[0]) : [];
+    const columnasVisibles = columnas.slice(0, MAX_COLUMNAS_VISIBLES);
+
+    const selectStyles = {
+        control: (base) => ({
+            ...base,
+            backgroundColor: '#1f1f1f',
+            color: '#ffffff',
+            border: 'none',
+            boxShadow: 'none',
+            '&:hover': { borderColor: '#009a44' },
+            '&:focus-within': { outline: 'none', boxShadow: 'none' },
+        }),
+        singleValue: (base) => ({ ...base, color: '#ffffff' }),
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused ? '#009a44' : '#1f1f1f',
+            color: '#ffffff',
+            cursor: 'pointer',
+        }),
+    };
 
     return (
         <div className="pb-4 overflow-y-auto">
             <div className="flex flex-col lg:flex-row justify-between items-center mb-4 gap-4">
-                {/* Selector de tabla */}
-                <select
-                    value={tablaSeleccionada || ""}
-                    onChange={(e) => setTablaSeleccionada(e.target.value)}
-                    className="form-select w-auto"
-                >
-                    <option value="">-- Elige tabla --</option>
-                    {tablas.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                    ))}
-                </select>
+                {tablas.length > 0 && (
+                    <div className="w-full lg:w-1/3">
+                        <SelectForm
+                            key={tablas.length}
+                            options={selectOptions}
+                            placeholder="-- Elige tabla --"
+                            value={
+                                tablaSeleccionada
+                                    ? { label: tablaSeleccionada, value: tablaSeleccionada }
+                                    : null
+                            }
+                            onChange={(op) => setTablaSeleccionada(op.value)}
+                            bgColor="#00aa4d"
+                            isDisabled={tablas.length === 0}
+                            menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                            menuPosition="fixed"
+                            styles={{ ...selectStyles, menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                        />
+                    </div>
+                )}
 
                 <div className="flex gap-2">
                     <CreateButton onClick={() => setShowModalCrear(true)} disabled={!tablaSeleccionada} />
@@ -117,7 +140,7 @@ const RegistrosPage = () => {
             ) : (
                 <Table>
                     <TableHead>
-                        {Object.keys(currentData[0]).map((col) => (
+                        {columnasVisibles.map((col) => (
                             <TableCell key={col}>{col}</TableCell>
                         ))}
                         <TableCell>Acciones</TableCell>
@@ -125,8 +148,8 @@ const RegistrosPage = () => {
                     <TableBody>
                         {currentData.map((fila, idx) => (
                             <TableRow key={idx}>
-                                {Object.values(fila).map((val, j) => (
-                                    <TableCell key={j}>{val}</TableCell>
+                                {columnasVisibles.map((col, j) => (
+                                    <TableCell key={j}>{fila[col]}</TableCell>
                                 ))}
                                 <TableCell>
                                     <div className="flex gap-2">
@@ -171,18 +194,19 @@ const RegistrosPage = () => {
             {/* Modales */}
             {showModalCrear && (
                 <ModalCrearRegistro
-                    tabla={tablaSeleccionada}
+                    tableName={tablaSeleccionada}
+                    schema={schema}
                     onClose={() => setShowModalCrear(false)}
                     onSave={(data) => crearRegistro(tablaSeleccionada, data)}
                 />
             )}
 
             {showModalEditar && (
-                <ModalEditarRegistro
-                    tabla={tablaSeleccionada}
+                <ModalRegistroEditForm
+                    tableName={tableName}
+                    schema={schema}
                     registro={registroSeleccionado}
-                    onClose={() => setShowModalEditar(false)}
-                    onSave={(data) => actualizarRegistro(tablaSeleccionada, registroSeleccionado.id, data)}
+                    onClose={onClose}
                 />
             )}
 
