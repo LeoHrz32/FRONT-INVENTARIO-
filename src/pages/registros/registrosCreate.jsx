@@ -55,7 +55,6 @@ const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
 
         try {
             setLoading(true);
-            // ← Aquí ahora sí llamas la función correcta
             await crearRegistro(tableName, payload);
             console.log("✅ Registro creado en tabla", tableName);
             show_alert(`Registro añadido correctamente en ${tableName}`, 'success');
@@ -84,44 +83,66 @@ const ModalRegistroCreateForm = ({ onClose, tableName, schema }) => {
     }
 
     return (
-        <>
-            <div className="absolute inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50">
-                <DivForm1>
-                    <DivForm2>
-                        <div className="relative flex items-center mb-10 mt-4">
-                            <Heading level={1}>
-                                Crear <span className="text-primary">Registro</span>
-                            </Heading>
-                            <button onClick={handleCancel} className="absolute right-0 text-gray-400 hover:text-white">
-                                <RiCloseLine size={24} />
-                            </button>
-                        </div>
-                        <Form onSubmit={handleCreate}>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {camposForm.map(col => (
-                                    <FormLabel key={col.name} label={
-                                        <span>{col.name} <span className="text-red-500">*</span></span>
-                                    }>
-                                        <InputField
-                                            type="text"
-                                            name={col.name}
-                                            placeholder={`Ingrese ${col.name}`}
-                                            value={formData[col.name]}
-                                            onChange={handleChange}
-                                        />
-                                        {errors[col.name] && (
-                                            <p className="text-red-500 text-sm mt-1">{errors[col.name]}</p>
-                                        )}
-                                    </FormLabel>
-                                ))}
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="w-full max-w-3xl bg-secondary-100 text-white rounded-2xl shadow-lg p-8 relative">
+                {/* Botón Cerrar */}
+                <button
+                    onClick={handleCancel}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                >
+                    <RiCloseLine size={24} />
+                </button>
+
+                {/* Título */}
+                <h2 className="text-3xl font-bold mb-6">
+                    Crear <span className="text-primary">Registro</span>
+                </h2>
+
+                {/* Formulario */}
+                <form onSubmit={handleCreate} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {camposForm.map(col => (
+                            <div key={col.name} className="w-full">
+                                <label className="block text-base font-medium text-gray-300 mb-1">
+                                    {col.name} <span className="text-red-400">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name={col.name}
+                                    placeholder={`Ingrese ${col.name}`}
+                                    value={formData[col.name]}
+                                    onChange={handleChange}
+                                    className="w-full bg-secondary-900 border border-gray-700 text-white placeholder-gray-400 rounded-lg px-3 py-2 focus:ring-primary/50 focus:border-primary"
+                                />
+                                {errors[col.name] && (
+                                    <p className="text-red-400 text-sm mt-1">{errors[col.name]}</p>
+                                )}
                             </div>
-                            <CreateCancelButtons name="Registrar" onCreate={handleCreate} onCancel={handleCancel} />
-                        </Form>
-                    </DivForm2>
-                </DivForm1>
+                        ))}
+                    </div>
+
+                    <div className="flex justify-end space-x-4">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg"
+                        >
+                            {loading ? 'Registrando…' : 'Registrar'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleCancel}
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                        >
+                            Cancelar
+                        </button>
+
+                    </div>
+                </form>
+
+                {loading && <LoadingScreen />}
             </div>
-            {loading && <LoadingScreen />}
-        </>
+        </div>
     );
 };
 

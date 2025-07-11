@@ -253,7 +253,7 @@ function UserTable() {
                             <TableRow key={index}>
                                 <TableCell>{user.str_name_user}</TableCell>
                                 <TableCell>{user.str_email}</TableCell>
-                                <TableCell>{user.str_password}</TableCell>
+                                <TableCell>{user.str_password ? "*".repeat(user.str_password.length) : ""}</TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <button

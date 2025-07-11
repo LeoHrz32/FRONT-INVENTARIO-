@@ -26,7 +26,7 @@ const ModalUserEditForm = ({ onClose, user }) => {
             setFormData({
                 str_name_user: user.str_name_user,
                 str_email: user.str_email,
-                str_password: user.str_password
+                str_password: "**********"
             });
         }
     }, [user]);

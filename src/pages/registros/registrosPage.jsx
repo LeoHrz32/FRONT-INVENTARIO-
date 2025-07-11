@@ -8,10 +8,11 @@ import TableCell from "../../components/table/TableCell";
 import Pagination from "../../components/table/Pagination";
 import { CreateButton, SearchBar, ItemsPerPageSelect } from "../../components/table/TopBarElements";
 import ModalCrearRegistro from "./registrosCreate";
-import ModalEditarRegistro from "./registrosEdit";
+import ModalRegistroEditForm from "./registrosEdit";
 import ModalViewRegistro from "./registrosView";
 import { RiDeleteBin6Line, RiEdit2Line, RiEyeLine } from "react-icons/ri";
 import SelectForm from "../../components/form/SelectForm";
+import { show_alert, showAlert } from "../../components/alertFunctions";
 
 const MAX_COLUMNAS_VISIBLES = 5;
 
@@ -33,6 +34,7 @@ const RegistrosPage = () => {
         limpiarErrores,
         limpiarMensajes,
         schema,
+        limpiarRegistroSeleccionado
     } = useRegistros();
 
     const [filteredData, setFilteredData] = useState([]);
@@ -43,8 +45,16 @@ const RegistrosPage = () => {
     const [showModalView, setShowModalView] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const handleOpenEdit = async (id) => {
+        await obtenerRegistroPorId(tablaSeleccionada, id);
+        setShowModalEditar(true);
+    };
+
     const selectOptions = useMemo(
-        () => tablas.map((t) => ({ label: t, value: t })),
+        () =>
+            tablas
+                .filter((t) => t !== "tbl_users")
+                .map((t) => ({ label: t, value: t })),
         [tablas]
     );
 
@@ -67,12 +77,19 @@ const RegistrosPage = () => {
     }, []);
 
     useEffect(() => {
+        if (tablaSeleccionada) {
+            obtenerRegistros(tablaSeleccionada);
+            limpiarRegistroSeleccionado();
+        }
+    }, [tablaSeleccionada]);
+
+    useEffect(() => {
         if (mensajes.length) {
-            alert(mensajes[0]);
+            show_alert(mensajes[0], "success");
             limpiarMensajes();
         }
         if (errores.length) {
-            alert(errores[0]);
+            show_alert(errores[0], "error");
             limpiarErrores();
         }
     }, [mensajes, errores]);
@@ -102,6 +119,29 @@ const RegistrosPage = () => {
         }),
     };
 
+    const handleDeleteClick = (id) => {
+        showAlert({
+            title: '¿Seguro de eliminar el registro?',
+            icon: 'question',
+            text: 'No se podrá dar marcha atrás',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        },
+            async () => {
+                try {
+                    await eliminarRegistro(tablaSeleccionada, id);
+                    show_alert('Registro eliminado correctamente', 'success');
+                } catch (error) {
+                    console.error("Error al eliminar el registro:", error);
+                    show_alert('Error al eliminar el registro', 'error');
+                }
+            },
+            () => {
+                show_alert('El registro NO fue eliminado', 'info');
+            });
+    };
+
     return (
         <div className="pb-4 overflow-y-auto">
             <div className="flex flex-col lg:flex-row justify-between items-center mb-4 gap-4">
@@ -111,11 +151,7 @@ const RegistrosPage = () => {
                             key={tablas.length}
                             options={selectOptions}
                             placeholder="-- Elige tabla --"
-                            value={
-                                tablaSeleccionada
-                                    ? { label: tablaSeleccionada, value: tablaSeleccionada }
-                                    : null
-                            }
+                            value={tablaSeleccionada ? { label: tablaSeleccionada, value: tablaSeleccionada } : null}
                             onChange={(op) => setTablaSeleccionada(op.value)}
                             bgColor="#00aa4d"
                             isDisabled={tablas.length === 0}
@@ -163,16 +199,13 @@ const RegistrosPage = () => {
                                             <RiEyeLine />
                                         </button>
                                         <button
-                                            onClick={() => {
-                                                obtenerRegistroPorId(tablaSeleccionada, fila.id);
-                                                setShowModalEditar(true);
-                                            }}
+                                            onClick={() => handleOpenEdit(fila.id)}
                                             className="p-2 rounded bg-secondary-100 hover:bg-secondary-500 text-white"
                                         >
                                             <RiEdit2Line />
                                         </button>
                                         <button
-                                            onClick={() => eliminarRegistro(tablaSeleccionada, fila.id)}
+                                            onClick={() => handleDeleteClick(fila.id)}
                                             className="p-2 rounded bg-red-500 text-white"
                                         >
                                             <RiDeleteBin6Line />
@@ -191,7 +224,6 @@ const RegistrosPage = () => {
                 </Table>
             )}
 
-            {/* Modales */}
             {showModalCrear && (
                 <ModalCrearRegistro
                     tableName={tablaSeleccionada}
@@ -201,18 +233,21 @@ const RegistrosPage = () => {
                 />
             )}
 
-            {showModalEditar && (
+            {showModalEditar && registroSeleccionado && (
                 <ModalRegistroEditForm
-                    tableName={tableName}
-                    schema={schema}
                     registro={registroSeleccionado}
-                    onClose={onClose}
+                    tableName={tablaSeleccionada}
+                    schema={schema}
+                    onClose={() => {
+                        setShowModalEditar(false);
+                        limpiarRegistroSeleccionado();
+                    }}
                 />
             )}
-
             {showModalView && (
                 <ModalViewRegistro
                     registro={registroSeleccionado}
+                    schema={schema}
                     onClose={() => setShowModalView(false)}
                 />
             )}

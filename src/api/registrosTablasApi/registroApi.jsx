@@ -19,18 +19,17 @@ export const getSingleRecordRequest = (nombreTabla, id) =>
     axios.get(`${API}/registros/${nombreTabla}/${id}`);
 
 // 🔹 Crear un nuevo registro
-export const createRecordRequest = (nombreTabla, datos) => {
-    console.log("📤 Enviando POST a:", `${API}/registros/${nombreTabla}`);
-    console.log("📦 Datos que se envían:", datos);
-    return axios.post(`${API}/registros/${nombreTabla}`, datos);
-};
+export const createRecordRequest = (nombreTabla, datos) =>
+    axios.post(`${API}/registros/${nombreTabla}`, datos);
 
 // 🔹 Actualizar un registro existente
-export const updateRecordRequest = (nombreTabla, campoPk, valorPk, datos) =>
-    axios.put(`${API}/registros/${nombreTabla}/${campoPk}/${valorPk}`, datos);
+export const updateRecordRequest = (nombreTabla, id, datos) => {
+    return axios.put(
+        `${API}/registros/${nombreTabla}/${id}`,
+        datos
+    );
+};
 
 // 🔹 Eliminar un registro por ID
 export const deleteRecordRequest = (nombreTabla, id) =>
     axios.delete(`${API}/registros/${nombreTabla}/${id}`);
-
-

@@ -12,7 +12,7 @@ import ModalTablaCreateForm from './tablasCreate';
 import ModalTablaEditForm from './tablasEdit';
 import ModalTablaView from './tablasView';
 import LoadingScreen from '../../components/LoadingScreen';
-import { show_alert } from '../../components/alertFunctions';
+import { show_alert,showAlert } from '../../components/alertFunctions';
 
 const DynamicTableView = () => {
     const {
@@ -86,7 +86,30 @@ const DynamicTableView = () => {
         getColumnasTabla(table.nombre_tabla);
         setShowViewModal(true);
     };
-    const handleDeleteClick = table => deleteTabla(table.nombre_tabla);
+
+    const handleDeleteClick = (table) => {
+        showAlert({
+            title: '¿Seguro de eliminar la tabla?',
+            icon: 'question',
+            text: 'No se podrá dar marcha atrás',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        },
+            async () => {
+                try {
+                    await deleteTabla(table.nombre_tabla);
+                    show_alert('Tabla eliminada correctamente', 'success');
+                } catch (error) {
+                    console.error("Error al eliminar la tabla:", error);
+                    show_alert('Error al eliminar la tabla', 'error');
+                }
+            },
+            () => {
+                show_alert('La tabla NO fue eliminada', 'info');
+            });
+    };
+
 
     return (
         <div className="pb-4 overflow-y-auto">

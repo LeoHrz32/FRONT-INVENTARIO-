@@ -1,52 +1,46 @@
-import React, { useRef } from 'react';
-import { RiCloseLine } from 'react-icons/ri';
+import React from "react";
+import { RiCloseLine } from "react-icons/ri";
 
-const ModalRegistroView = ({ record, onClose, schema, viewModalLayout }) => {
-    const modalRef = useRef(null);
-
-    const handleClickOutside = (event) => {
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-            onClose();
-        }
-    };
-
-    const renderElement = (key) => {
-        const label = schema.find((col) => col.name === key)?.name || key;
-        const value = record[key];
-
-        return (
-            <div key={key} className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-300">{label}</h3>
-                <p className="text-gray-400">
-                    {value !== undefined && value !== null && value !== ''
-                        ? value
-                        : '—'}
-                </p>
-            </div>
-        );
-    };
+const ModalRegistroView = ({ registro, schema, onClose }) => {
+    if (!registro || !schema) {
+        console.warn("⚠️ [ModalRegistroView] registro o schema no disponibles.");
+        return null;
+    }
 
     return (
-        <div
-            className="fixed inset-0 flex justify-center items-center z-50 bg-gray-900 bg-opacity-50 overflow-auto"
-            onClick={handleClickOutside}
-        >
-            <div
-                ref={modalRef}
-                className="bg-secondary-100 p-6 rounded-xl w-full max-w-[80%] max-h-[90%] overflow-auto"
-            >
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold text-white">Detalle del Registro</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white">
-                        <RiCloseLine size={24} />
-                    </button>
-                </div>
-                <div className="flex flex-col space-y-4">
-                    {viewModalLayout.map((row, rowIndex) => (
-                        <div key={rowIndex} className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-                            {row.map((key) => renderElement(key))}
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="w-full max-w-3xl bg-secondary-100 text-white rounded-2xl shadow-lg p-8 relative">
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                >
+                    <RiCloseLine size={24} />
+                </button>
+
+                <h2 className="text-3xl font-bold mb-6">
+                    Detalle <span className="text-primary">Registro</span>
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Array.isArray(schema) && schema.map((col) => (
+                        <div key={col.name} className="w-full">
+                            <label className="block text-base font-medium text-gray-300 mb-1">
+                                {col.name}
+                            </label>
+                            <div className="w-full bg-secondary-900 border border-gray-700 text-white rounded-lg px-3 py-2">
+                                {registro[col.name] ?? "—"}
+                            </div>
                         </div>
                     ))}
+                </div>
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg"
+                    >
+                        Cerrar
+                    </button>
                 </div>
             </div>
         </div>
